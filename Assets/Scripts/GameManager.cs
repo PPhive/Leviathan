@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public float DragonSpeed;
+    public Player MyPlayer;
+    public DragonManager MyDragon;
 
     private void Awake()
     {

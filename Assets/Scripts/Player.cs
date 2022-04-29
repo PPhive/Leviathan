@@ -74,7 +74,7 @@ public class Player : MonoBehaviour
         //Vertical Temp
         transform.position += new Vector3(0, Mathf.Sin(RealPitchAngle / 180f * 3.1415f) * Speed * Time.fixedDeltaTime,0);
         //Horizontal Temp
-        transform.position += new Vector3((Mathf.Cos(RealPitchAngle / 180f * 3.1415f)  * Speed - GameManager.instance.DragonSpeed) * Time.fixedDeltaTime, 0, 0);
+        transform.position += new Vector3((Mathf.Cos(RealPitchAngle / 180f * 3.1415f)  * Speed - GameManager.instance.MyDragon.DragonSpeed) * Time.fixedDeltaTime, 0, 0);
     }
 
     void AdjustPitchSpeed(float TargetSpeed) 
