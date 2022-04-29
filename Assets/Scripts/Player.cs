@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     private GameObject Rudder;
 
     [SerializeField]
-    private float Speed, PitchAngleAccel, PitchAngle, PitchMomentum, RealPitchAngle;
+    private float Speed,PitchSpeedCap, PitchAngleAccel, PitchAngle, PitchSpeed, RealPitchAngle;
 
     [SerializeField]
     private float Momentum;
@@ -31,12 +31,18 @@ public class Player : MonoBehaviour
     {
         if (MyInput.PitchVector > 0)
         {
-            PitchAngle = Mathf.Clamp(PitchAngle += PitchAngleAccel * Time.fixedDeltaTime, -80f, 80f);
+            AdjustPitchSpeed(PitchSpeedCap);
         }
         else if (MyInput.PitchVector < 0)
         {
-            PitchAngle = Mathf.Clamp(PitchAngle -= PitchAngleAccel * Time.fixedDeltaTime, -80f, 80f);
+            AdjustPitchSpeed(-PitchSpeedCap);
+            //PitchAngle = PitchAngle -= PitchAngleAccel * Time.fixedDeltaTime;
         }
+        else
+        {
+            AdjustPitchSpeed(0);
+        }
+        /*
         else 
         {
             if (PitchAngle > 0) 
@@ -48,11 +54,38 @@ public class Player : MonoBehaviour
                 PitchAngle = Mathf.Clamp(PitchAngle += PitchAngleAccel * Time.fixedDeltaTime, -80f, 0);
             }
         }
+        */
 
-        RealPitchAngle = PitchMomentum + PitchAngle;
+        PitchAngle += PitchSpeed * Time.fixedDeltaTime;
 
-        //Updown Temp
+        /*
+        if (PitchAngle > 360)
+        {
+            PitchAngle -= 360;
+        }
+        if (PitchAngle < 0)
+        {
+            PitchAngle += 360;
+        }
+        */
+
+        RealPitchAngle = PitchAngle;
+
+        //Vertical Temp
         transform.position += new Vector3(0, Mathf.Sin(RealPitchAngle / 180f * 3.1415f) * Speed * Time.fixedDeltaTime,0);
-        transform.position += new Vector3(0, Mathf.Sin(RealPitchAngle / 180f * 3.1415f) * Speed * Time.fixedDeltaTime, 0);
+        //Horizontal Temp
+        transform.position += new Vector3((Mathf.Cos(RealPitchAngle / 180f * 3.1415f)  * Speed - GameManager.instance.DragonSpeed) * Time.fixedDeltaTime, 0, 0);
+    }
+
+    void AdjustPitchSpeed(float TargetSpeed) 
+    {
+        if (PitchSpeed > TargetSpeed)
+        {
+            PitchSpeed = Mathf.Clamp(PitchSpeed -= PitchAngleAccel * Time.fixedDeltaTime, TargetSpeed, 30f);
+        }
+        else if (PitchSpeed < TargetSpeed)
+        {
+            PitchSpeed = Mathf.Clamp(PitchSpeed += PitchAngleAccel * Time.fixedDeltaTime, -30f, TargetSpeed);
+        }
     }
 }

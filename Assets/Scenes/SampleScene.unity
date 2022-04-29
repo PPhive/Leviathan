@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71141218c6d8b5845ace6a3e355cc970, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DragonSpeed: 5
 --- !u!4 &26101218
 Transform:
   m_ObjectHideFlags: 0
@@ -542,9 +543,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Rudder: {fileID: 771370079}
   Speed: 5
-  PitchAngleAccel: 25
+  PitchSpeedCap: 70
+  PitchAngleAccel: 180
   PitchAngle: 0
-  PitchMomentum: 0
+  PitchSpeed: 0
   RealPitchAngle: 0
   Momentum: 0
   MyInput: {fileID: 1138975463}
