@@ -16,6 +16,6 @@ public class CameraMotion : MonoBehaviour
     {
         Vector3 PlayerPos = GameManager.instance.MyPlayer.transform.position;
         transform.position = new Vector3(PlayerPos.x, PlayerPos.y * 0.5f, transform.position.z);
-        MyCamera.orthographicSize = PlayerPos.y * 0.2f + 7;
+        MyCamera.orthographicSize = PlayerPos.y * 0.3f + 7;
     }
 }
