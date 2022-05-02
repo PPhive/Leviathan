@@ -13,7 +13,7 @@ public class PlayerBullet : MonoBehaviour
         if (Timer > 0)
         {
             Timer -= Time.fixedDeltaTime;
-            MyRB.velocity = transform.right * 100f - new Vector3(GameManager.instance.MyDragon.DragonSpeed, 0);
+            MyRB.velocity = transform.right * 50f - new Vector3(GameManager.instance.MyDragon.DragonSpeed, 0);
         }
         else 
         {

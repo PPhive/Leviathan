@@ -6,6 +6,8 @@ public class CameraMotion : MonoBehaviour
 {
     [SerializeField]
     private Camera MyCamera;
+    [SerializeField]
+    private GameObject Edges;
     void Start()
     {
         
@@ -15,7 +17,11 @@ public class CameraMotion : MonoBehaviour
     void Update()
     {
         Vector3 PlayerPos = GameManager.instance.MyPlayer.transform.position;
-        transform.position = new Vector3(PlayerPos.x, PlayerPos.y * 0.5f, transform.position.z);
-        MyCamera.orthographicSize = PlayerPos.y * 0.3f + 7;
+
+        float PosYClamped = Mathf.Clamp(PlayerPos.y * 0.5f, -20, 20);
+
+        transform.position = new Vector3(PlayerPos.x, PosYClamped, transform.position.z);
+        MyCamera.orthographicSize = Mathf.Clamp(Mathf.Abs(PlayerPos.y) * 0.5f + 7f, 0 , 15);
+        Edges.transform.localScale = new Vector3(MyCamera.orthographicSize, MyCamera.orthographicSize,0);
     }
 }

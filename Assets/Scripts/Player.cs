@@ -6,6 +6,8 @@ public class Player : MonoBehaviour
 {
     [SerializeField]
     private GameObject Rudder;
+    [SerializeField]
+    private Rigidbody2D MyRigidbody;
 
     [SerializeField]
     [Header("Pitch")]
@@ -20,6 +22,20 @@ public class Player : MonoBehaviour
     private float Speed;
     [SerializeField]
     private float EngineSpeed, EngineAccel, EngineMaxSpeed, EngineMinSpeed, EngineOverDriveSpeed;
+
+    /*
+    [SerializeField]
+    [Header("Stall")]
+    private float StallSpeed;
+    private float StallAccel;
+
+    [SerializeField]
+    [Header("Lift")]
+    private float LiftAccel;
+    private float GravAccel;
+    */
+
+
 
     [Space(10)]
 
@@ -95,10 +111,10 @@ public class Player : MonoBehaviour
             BulletFireCD -= Time.fixedDeltaTime;
         }
 
-        //Vertical Temp
-        transform.position += new Vector3(0, Mathf.Sin(RealPitchAngle / 180f * 3.1415f) * Speed * Time.fixedDeltaTime,0);
-        //Horizontal Temp
-        transform.position += new Vector3((Mathf.Cos(RealPitchAngle / 180f * 3.1415f)  * Speed - GameManager.instance.MyDragon.DragonSpeed) * Time.fixedDeltaTime, 0, 0);
+        float VerticalSpeed = Mathf.Sin(RealPitchAngle / 180f * 3.1415f) * Speed;
+        float HorizontalSpeed = Mathf.Cos(RealPitchAngle / 180f * 3.1415f) * Speed - GameManager.instance.MyDragon.DragonSpeed;
+        MyRigidbody.velocity = new Vector2(HorizontalSpeed, VerticalSpeed);
+        GameManager.instance.MyPlayerVelocity = MyRigidbody.velocity + new Vector2(GameManager.instance.MyDragon.DragonSpeed,0);
     }
 
     void AdjustPitchSpeed(float TargetSpeed) 

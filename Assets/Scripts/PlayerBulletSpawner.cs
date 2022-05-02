@@ -27,7 +27,7 @@ public class PlayerBulletSpawner : MonoBehaviour
                 BulletList[i].SetActive(true);
                 BulletList[i].transform.position = transform.position;
                 BulletList[i].transform.rotation = transform.rotation;
-                BulletList[i].transform.eulerAngles += new Vector3(0, 0, Random.Range(-1f, 1f));
+                BulletList[i].transform.eulerAngles += new Vector3(0, 0, Random.Range(-2f, 2f));
                 BulletScript.Timer = 1.5f;
                 i = BulletList.Count;
             }

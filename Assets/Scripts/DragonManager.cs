@@ -4,42 +4,81 @@ using UnityEngine;
 
 public class DragonManager : MonoBehaviour
 {
+    public GameObject Head, Body, Tail;
+    public enum Weapons {UpperSpikes, LowerSpikes, UpperFireBalls, LowerFireballs};
+    
+    [Space(10)]
     [SerializeField]
-    private List<SegmentScript> Segments;
+    private List<GameObject> Segments;
     [SerializeField]
     private float GraphShift, SegLength;
+    public float DragonSpeed;
+    public float DragonPos;
 
-    public float DragonSpeed; 
+    public float SinBigAmp, SinBigFreq, SinSmallAmp, SinSmallFreq;
 
+    public int DragonLength;
 
     void Start()
     {
-
+        SpawnDragon(DragonLength);
     }
 
     void FixedUpdate()
     {
         GraphShift += DragonSpeed * Time.fixedDeltaTime; 
-        SegmentsFollowCurve1();
+        SegmentsFollowCurveStatic1();
     }
 
 
-    void SegmentsFollowCurve1() 
+    void SegmentsFollowCurveStatic1() //Y = Sin(0.03x) + Sin(0.2x)
     {
         for (int i = Segments.Count - 1; i >= 0; i--)
         {
             float XPos = 0 - SegLength * i;
-            float XminusGraphShift = Segments[i].transform.position.x - GraphShift;
-            Segments[i].transform.position = new Vector3(XPos, Mathf.Sin(0.2f * XminusGraphShift), 0);
+            float XminusGraphShift = Segments[i].transform.position.x + GraphShift;
+            SegmentScript ThisScript = Segments[i].GetComponent<SegmentScript>();
 
-            if (i > 0)
+            //DragonSegment's Height is controlled by    y = f(x)
+            Segments[i].transform.position = new Vector3(XPos, SinBigAmp * Mathf.Sin(SinBigFreq * XminusGraphShift) + SinSmallAmp * Mathf.Sin(SinSmallFreq * XminusGraphShift), 0.1f * i);
+            
+            //DragonSegment's Angle is controlled by     dy = f'(x)dx
+            float DY = SinBigAmp * SinBigFreq * Mathf.Cos(SinBigFreq * XminusGraphShift) + SinSmallAmp * SinSmallFreq * Mathf.Cos(SinSmallFreq * XminusGraphShift);
+            Segments[i].transform.eulerAngles = transform.forward * Mathf.Atan(DY) / 3.14f * 180f;
+
+            if (i == 0) 
             {
-                //This LookAt Segemnt of Code came from:
-                //https://answers.unity.com/questions/585035/lookat-2d-equivalent-.html
-                Vector3 dir = Segments[i - 1].transform.position - Segments[i].transform.position;
-                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                Segments[i].transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                //SegmentScript.i
             }
+        }
+    }
+
+    void SpawnDragon(int Length) 
+    {
+        if (Length > 3)
+        {
+            for (int i = 0; i < Length; i++) //Spawn head
+            {
+                if (i == 0)
+                {
+                    GameObject NewSeg = Instantiate(Head);
+                    Segments.Add(NewSeg);
+                }
+                else if (i == Length - 1) //Spawn tail
+                {
+                    GameObject NewSeg = Instantiate(Tail);
+                    Segments.Add(NewSeg);
+                }
+                else //Spawn body
+                {
+                    GameObject NewSeg = Instantiate(Body);
+                    Segments.Add(NewSeg);
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Dragon too short, can't spawn");
         }
     }
 }
