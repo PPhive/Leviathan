@@ -39,16 +39,19 @@ public class DragonManager : MonoBehaviour
 
     void SegmentsFollowCurveStatic1() //Y = Sin(0.03x) + Sin(0.2x)
     {
-        for (int i = Segments.Count - 1; i >= 0; i--)
+        if (GameManager.instance.CurrentState == GameManager.States.Game) 
         {
-            float XPos = 0 - SegLength * i;
-            float XminusGraphShift = Segments[i].transform.position.x + GraphShift;
-            //DragonSegment's Height is controlled by    y = f(x)
-            Segments[i].transform.position = new Vector3(XPos, SinBigAmp * Mathf.Sin(SinBigFreq * XminusGraphShift) + SinSmallAmp * Mathf.Sin(SinSmallFreq * XminusGraphShift), 0.1f * i);
-            
-            //DragonSegment's Angle is controlled by     dy = f'(x)dx
-            float DY = SinBigAmp * SinBigFreq * Mathf.Cos(SinBigFreq * XminusGraphShift) + SinSmallAmp * SinSmallFreq * Mathf.Cos(SinSmallFreq * XminusGraphShift);
-            Segments[i].transform.eulerAngles = transform.forward * Mathf.Atan(DY) / 3.14f * 180f;
+            for (int i = Segments.Count - 1; i >= 0; i--)
+            {
+                float XPos = 0 - SegLength * i;
+                float XminusGraphShift = Segments[i].transform.position.x + GraphShift;
+                //DragonSegment's Height is controlled by    y = f(x)
+                Segments[i].transform.position = new Vector3(XPos, SinBigAmp * Mathf.Sin(SinBigFreq * XminusGraphShift) + SinSmallAmp * Mathf.Sin(SinSmallFreq * XminusGraphShift), 0.1f * i);
+
+                //DragonSegment's Angle is controlled by     dy = f'(x)dx
+                float DY = SinBigAmp * SinBigFreq * Mathf.Cos(SinBigFreq * XminusGraphShift) + SinSmallAmp * SinSmallFreq * Mathf.Cos(SinSmallFreq * XminusGraphShift);
+                Segments[i].transform.eulerAngles = transform.forward * Mathf.Atan(DY) / 3.14f * 180f;
+            }
         }
     }
 
@@ -90,10 +93,13 @@ public class DragonManager : MonoBehaviour
 
     public void DeSpawnDragon() 
     {
-        for (int i = 0; i < Segments.Count; i++) 
+        for (int j = 0; j < Segments.Count; j++) 
         {
-            Destroy(Segments[i].gameObject);
-            Segments.Remove(Segments[i]);
+            Destroy(Segments[j].gameObject);
+        }
+        for (int j = 0; j < Segments.Count; j++)
+        {
+            Segments.Remove(Segments[j]);
         }
     }
 }
