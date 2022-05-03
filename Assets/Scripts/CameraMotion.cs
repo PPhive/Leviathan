@@ -8,6 +8,9 @@ public class CameraMotion : MonoBehaviour
     private Camera MyCamera;
     [SerializeField]
     private GameObject Edges;
+    [SerializeField]
+    private float ShakeTimer;
+
     void Start()
     {
         
@@ -20,8 +23,20 @@ public class CameraMotion : MonoBehaviour
 
         float PosYClamped = Mathf.Clamp(PlayerPos.y * 0.5f, -20, 20);
 
-        transform.position = new Vector3(PlayerPos.x, PosYClamped, transform.position.z);
-        MyCamera.orthographicSize = Mathf.Clamp(Mathf.Abs(PlayerPos.y) * 0.5f + 7f, 0 , 15);
+        transform.position = new Vector3(PlayerPos.x + 5, PosYClamped, transform.position.z);
+        MyCamera.orthographicSize = Mathf.Clamp(Mathf.Abs(PlayerPos.y) * 0.2f + 10f, 0 , 15);
         Edges.transform.localScale = new Vector3(MyCamera.orthographicSize, MyCamera.orthographicSize,0);
+
+        if (ShakeTimer > 0) 
+        {
+            ShakeTimer -= Time.deltaTime;
+            MyCamera.gameObject.transform.localPosition = new Vector2(Mathf.Sin(ShakeTimer * 20 * 3.1415f) * ShakeTimer * 2,0);
+        }
+
+    }
+
+    public void Shake() 
+    {
+        ShakeTimer = 0.25f;
     }
 }

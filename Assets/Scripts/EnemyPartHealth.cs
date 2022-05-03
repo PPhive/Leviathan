@@ -5,19 +5,40 @@ using UnityEngine;
 public class EnemyPartHealth : MonoBehaviour
 {
     public float health;
-    // Update is called once per frame
+    private float ShakeTimer;
+    private Vector3 OriginalPos;
+    void Start()
+    {
+        OriginalPos = transform.localPosition;
+    }
+
     void Update()
     {
-        
+        if (ShakeTimer >= 0) 
+        {
+            transform.localPosition = OriginalPos + Vector3.right * Mathf.Sin(ShakeTimer * 40) * ShakeTimer * 0.5f;
+            ShakeTimer -= Time.deltaTime;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Hit");
         if (collision.gameObject.tag == "Bullet") 
         {
-
-            //Destroy(gameObject);
+            health -= 1f;
+            Shake();
+            Instantiate(GameManager.instance.SmallBlood, transform.position - new Vector3(0, 0, 5), transform.rotation, transform.parent);
+            collision.gameObject.SetActive(false);
         }
+        if (health <= 0)
+        {
+            Instantiate(GameManager.instance.BigBlood, transform.position - new Vector3(0,0,5), transform.rotation, transform.parent);
+            Destroy(gameObject);
+        }
+    }
+
+    void Shake() 
+    {
+        ShakeTimer = 0.25f;
     }
 }

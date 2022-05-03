@@ -32,7 +32,7 @@ public class CloudManager : MonoBehaviour
     private void MoveCloud(List<GameObject> MyList, float YMin, float YMax, float XRate) //Move clouds in Update (NOT FixedUpdate)
     {
         float PlayerXSpeed = GameManager.instance.MyPlayerVelocity.x * Time.deltaTime;
-        float PlayerYPos = GameManager.instance.MyPlayer.gameObject.transform.position.y;
+        float PlayerYPos = -GameManager.instance.MyPlayer.gameObject.transform.position.y;
         for (int i = 0; i < MyList.Count; i++) 
         {
             float NewXPos = MyList[i].transform.localPosition.x - PlayerXSpeed * XRate;

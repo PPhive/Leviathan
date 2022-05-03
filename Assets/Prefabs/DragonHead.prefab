@@ -10,9 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8470136218506519870}
   - component: {fileID: 8470136218506519869}
-  - component: {fileID: 8470136218506519868}
-  - component: {fileID: 8470136218506519871}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Flesh (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,45 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &8470136218506519868
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8470136218506519857}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!114 &8470136218506519871
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8470136218506519857}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 844c7b442e1b12f4c9a78b206fef80b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 10
 --- !u!1 &8470136219125131246
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8470136219125131247}
   - component: {fileID: 8470136219125131244}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Jaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -219,7 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8470136219584283384}
   - component: {fileID: 8470136219584283385}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DragonSprites_5 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,7 +260,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8470136219603379429}
   - component: {fileID: 8470136219603379426}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DragonSprites_5 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -383,7 +342,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8470136219762029726}
   - component: {fileID: 8470136219762029727}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DragonSprites_5 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -464,7 +423,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8470136220028650526}
-  m_Layer: 0
+  - component: {fileID: 7580568981897650962}
+  m_Layer: 3
   m_Name: DragonHead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -488,6 +448,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7580568981897650962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8470136220028650512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45adbba51109d7841b8006d0136a7c0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MySkull: {fileID: 9189333757341646452}
+  MyJaw: {fileID: 8470136219125131246}
 --- !u!1 &8470136220175533885
 GameObject:
   m_ObjectHideFlags: 0
@@ -498,7 +472,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8470136220175533882}
   - component: {fileID: 8470136220175533883}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DragonSprites_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -580,7 +554,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5849347639027850217}
   - component: {fileID: 528236508034927566}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DragonSkull
   m_TagString: Untagged
   m_Icon: {fileID: 0}

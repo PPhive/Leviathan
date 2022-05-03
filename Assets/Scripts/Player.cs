@@ -5,6 +5,8 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
+    public float Health = 3;
+    [SerializeField]
     private GameObject Rudder;
     [SerializeField]
     private Rigidbody2D MyRigidbody;
@@ -139,6 +141,24 @@ public class Player : MonoBehaviour
         {
             EngineSpeed = Mathf.Clamp(EngineSpeed += EngineAccel * Time.fixedDeltaTime, 0, TargetSpeed);
         }
-        Debug.Log(TargetSpeed);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            GameManager.instance.MyCameraMotion.Shake();
+            Health -= 1;
+        }
+
+        if (Health <= 0)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
