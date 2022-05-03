@@ -166,7 +166,7 @@ MonoBehaviour:
   Levels:
   - Name: Easy
     Speed: 0
-    Length: 4
+    Length: 12
     Pattern: 0000000000000000020000000300000003000000
   - Name: Hard
     Speed: 0
