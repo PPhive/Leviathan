@@ -16,20 +16,23 @@ public class DragonManager : MonoBehaviour
     public float DragonSpeed;
     public float DragonPos;
     public float SinBigAmp, SinBigFreq, SinSmallAmp, SinSmallFreq;
-    public int DragonLength;
+    public float Health;//When this reaches 0, player wins;
 
     void Start()
     {
-        Level.Add(new int[4] { 0, 2, 1, 3 });
-        SpawnDragon(DragonLength);
     }
 
     void FixedUpdate()
     {
-        if (GameManager.instance.CurrentSate == GameManager.States.Game) 
+        if (GameManager.instance.CurrentState == GameManager.States.Game) 
         {
             GraphShift += DragonSpeed * Time.fixedDeltaTime;
             SegmentsFollowCurveStatic1();
+        }
+
+        if (Health <= 0) 
+        {
+            GameManager.instance.GameOver();
         }
     }
 
@@ -49,8 +52,9 @@ public class DragonManager : MonoBehaviour
         }
     }
 
-    void SpawnDragon(int Length) 
+    public void SpawnDragon(int Length) 
     {
+        Health = Length - 1; //No parts on head
         if (Length > 3)
         {
             int PatternCounter = 0;
@@ -68,10 +72,10 @@ public class DragonManager : MonoBehaviour
                 }
                 else //Spawn body
                 {
-                    GameObject NewSeg = Instantiate(Body[Level[GameManager.instance.Level][PatternCounter]]);
+                    GameObject NewSeg = Instantiate(Body[GameManager.instance.Levels[GameManager.instance.CurrentLevel].Pattern[PatternCounter]]);
                     Segments.Add(NewSeg);
                     PatternCounter++;
-                    if (PatternCounter >= Level[GameManager.instance.Level].Length)
+                    if (PatternCounter >= GameManager.instance.Levels[GameManager.instance.CurrentLevel].Pattern.Length)
                     {
                         PatternCounter = 0;
                     }
@@ -81,6 +85,15 @@ public class DragonManager : MonoBehaviour
         else
         {
             Debug.Log("Dragon too short, can't spawn");
+        }
+    }
+
+    public void DeSpawnDragon() 
+    {
+        for (int i = 0; i < Segments.Count; i++) 
+        {
+            Destroy(Segments[i].gameObject);
+            Segments.Remove(Segments[i]);
         }
     }
 }

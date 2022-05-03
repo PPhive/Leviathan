@@ -1,5 +1,6 @@
 Shader "SpriteHitResponse"
 {
+	//This code is base off of Unity's Default shader for sprites.
 	Properties
 	{
 		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
@@ -31,6 +32,30 @@ Shader "SpriteHitResponse"
 			#pragma multi_compile _ PIXELSNAP_ON
 			#include "UnityCG.cginc"
 			
+			//Noise from Burgess's code
+			#define TAU 6.28318530718
+
+            float _scale;
+
+            float rand (float2 uv) {
+                return frac(sin(dot(uv.xy, float2(12.9898, 78.233))) * 114514.1919);
+            }
+
+            float value_noise (float2 uv) {
+                float2 ipos = floor(uv);
+                float2 fpos = frac(uv); 
+                
+                float o  = rand(ipos);
+                float x  = rand(ipos + float2(1, 0));
+                float y  = rand(ipos + float2(0, 1));
+                float xy = rand(ipos + float2(1, 1));
+
+                float2 smooth = smoothstep(0, 1, fpos);
+                return lerp( lerp(o,  x, smooth.x), 
+                             lerp(y, xy, smooth.x), smooth.y);
+            }
+			//
+
 			struct appdata_t
 			{
 				float4 vertex   : POSITION;
@@ -76,9 +101,24 @@ Shader "SpriteHitResponse"
 				return color;
 			}
 
-			fixed4 frag(v2f IN) : SV_Target
+			float4 frag(v2f IN) : SV_Target
 			{
-				fixed4 c = SampleSpriteTexture (IN.texcoord) * IN.color;
+				float4 c = SampleSpriteTexture (IN.texcoord) * IN.color;
+
+				
+				float2 uv = IN.texcoord;
+				float3 color = (1,1,1);
+				float fn = 0;
+				float2 uv1 = uv;
+                float2 uv2 = uv;
+
+				//making the fractal noise;
+                fn += (1 / 2.0) * value_noise( uv1 * 0.5);
+                fn += (1 / 2.5) * value_noise( uv1 * 1);
+				
+				color.rrr * uv.x, 1;
+				//c.r += IN.texcoord.x * 0.02;
+
 				c.rgb *= c.a;
 				return c;
 			}

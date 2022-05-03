@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     public float Health = 3;
     [SerializeField]
-    private GameObject Rudder;
+    private GameObject MySprite;
     [SerializeField]
     private Rigidbody2D MyRigidbody;
 
@@ -24,20 +24,6 @@ public class Player : MonoBehaviour
     private float Speed;
     [SerializeField]
     private float EngineSpeed, EngineAccel, EngineMaxSpeed, EngineMinSpeed, EngineOverDriveSpeed;
-
-    /*
-    [SerializeField]
-    [Header("Stall")]
-    private float StallSpeed;
-    private float StallAccel;
-
-    [SerializeField]
-    [Header("Lift")]
-    private float LiftAccel;
-    private float GravAccel;
-    */
-
-
 
     [Space(10)]
 
@@ -63,60 +49,66 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Pitch Control
-        if (MyInput.PitchVector > 0)
+        if (GameManager.instance.CurrentState == GameManager.States.Game)
         {
-            AdjustPitchSpeed(PitchSpeedCap);
-        }
-        else if (MyInput.PitchVector < 0)
-        {
-            AdjustPitchSpeed(-PitchSpeedCap);
-            //PitchAngle = PitchAngle -= PitchAngleAccel * Time.fixedDeltaTime;
-        }
-        else
-        {
-            AdjustPitchSpeed(0);
-        }
-
-        PitchAngle += PitchSpeed * Time.fixedDeltaTime;
-        RealPitchAngle = PitchAngle;
-
-        //Speed Control
-        if (MyInput.SpeedVector > 0)
-        {
-            AdjustEngineSpeed(EngineOverDriveSpeed);
-        }
-        if (MyInput.SpeedVector < 0)
-        {
-            AdjustEngineSpeed(EngineMinSpeed);
-        }
-        else 
-        {
-            if (MyInput.SpeedVector == 0 && EngineSpeed > EngineMaxSpeed) 
+            //Pitch Control
+            if (MyInput.PitchVector > 0)
             {
-                AdjustEngineSpeed(EngineMaxSpeed);
+                AdjustPitchSpeed(PitchSpeedCap);
             }
-        }
-        Speed = EngineSpeed;
-
-
-        if (BulletFireCD <= 0)
-        {
-            if (MyInput.Fire)
+            else if (MyInput.PitchVector < 0)
             {
-                MyBulletSpawner.Fire();
+                AdjustPitchSpeed(-PitchSpeedCap);
             }
-            BulletFireCD += 0.1f;
-        }
-        else
-        {
-            BulletFireCD -= Time.fixedDeltaTime;
-        }
+            else
+            {
+                AdjustPitchSpeed(0);
+            }
 
-        float VerticalSpeed = Mathf.Sin(RealPitchAngle / 180f * 3.1415f) * Speed;
-        float HorizontalSpeed = Mathf.Cos(RealPitchAngle / 180f * 3.1415f) * Speed - GameManager.instance.MyDragon.DragonSpeed;
-        MyRigidbody.velocity = new Vector2(HorizontalSpeed, VerticalSpeed);
-        GameManager.instance.MyPlayerVelocity = MyRigidbody.velocity + new Vector2(GameManager.instance.MyDragon.DragonSpeed,0);
+            PitchAngle += PitchSpeed * Time.fixedDeltaTime;
+            RealPitchAngle = PitchAngle;
+
+            //Speed Control
+            if (MyInput.SpeedVector > 0)
+            {
+                AdjustEngineSpeed(EngineOverDriveSpeed);
+            }
+            if (MyInput.SpeedVector < 0)
+            {
+                AdjustEngineSpeed(EngineMinSpeed);
+            }
+            else
+            {
+                if (MyInput.SpeedVector == 0 && EngineSpeed > EngineMaxSpeed)
+                {
+                    AdjustEngineSpeed(EngineMaxSpeed);
+                }
+            }
+            Speed = EngineSpeed;
+
+
+            if (BulletFireCD <= 0)
+            {
+                if (MyInput.Fire)
+                {
+                    MyBulletSpawner.Fire();
+                }
+                BulletFireCD += 0.1f;
+            }
+            else
+            {
+                BulletFireCD -= Time.fixedDeltaTime;
+            }
+
+            float VerticalSpeed = Mathf.Sin(RealPitchAngle / 180f * 3.1415f) * Speed;
+            float HorizontalSpeed = Mathf.Cos(RealPitchAngle / 180f * 3.1415f) * Speed - GameManager.instance.MyDragon.DragonSpeed;
+            MyRigidbody.velocity = new Vector2(HorizontalSpeed, VerticalSpeed);
+            GameManager.instance.MyPlayerVelocity = MyRigidbody.velocity + new Vector2(GameManager.instance.MyDragon.DragonSpeed, 0);
+        }
+        else if (GameManager.instance.CurrentState == GameManager.States.Menu)
+        {
+            GameManager.instance.MyPlayerVelocity = transform.right * 15;
+        }
     }
 
     void AdjustPitchSpeed(float TargetSpeed) 
@@ -143,11 +135,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Enemy")
@@ -158,7 +145,19 @@ public class Player : MonoBehaviour
 
         if (Health <= 0)
         {
-            gameObject.SetActive(false);
+            GameManager.instance.GameOver();
         }
+    }
+
+    public void Ready() 
+    {
+        transform.position = new Vector2(0, 15);
+        Health = 5;
+        MySprite.SetActive(true);
+    }
+
+    public void Death() 
+    {
+        MySprite.SetActive(false);
     }
 }

@@ -33,6 +33,7 @@ public class EnemyPartHealth : MonoBehaviour
         if (health <= 0)
         {
             Instantiate(GameManager.instance.BigBlood, transform.position - new Vector3(0,0,5), transform.rotation, transform.parent);
+            GameManager.instance.MyDragon.Health -= 1;
             Destroy(gameObject);
         }
     }
