@@ -44,19 +44,24 @@ public class DragonManager : MonoBehaviour
             for (int i = Segments.Count - 1; i >= 0; i--)
             {
                 float XPos = 0 - SegLength * i;
+                if (Segments[i].transform != null) 
+                {
                 float XminusGraphShift = Segments[i].transform.position.x + GraphShift;
+
                 //DragonSegment's Height is controlled by    y = f(x)
                 Segments[i].transform.position = new Vector3(XPos, SinBigAmp * Mathf.Sin(SinBigFreq * XminusGraphShift) + SinSmallAmp * Mathf.Sin(SinSmallFreq * XminusGraphShift), 0.1f * i);
 
                 //DragonSegment's Angle is controlled by     dy = f'(x)dx
                 float DY = SinBigAmp * SinBigFreq * Mathf.Cos(SinBigFreq * XminusGraphShift) + SinSmallAmp * SinSmallFreq * Mathf.Cos(SinSmallFreq * XminusGraphShift);
                 Segments[i].transform.eulerAngles = transform.forward * Mathf.Atan(DY) / 3.14f * 180f;
+                }
             }
         }
     }
 
     public void SpawnDragon(int Length) 
     {
+        Segments = new List<GameObject> { };
         Health = Length - 1; //No parts on head
         if (Length > 3)
         {
